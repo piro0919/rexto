@@ -9,10 +9,6 @@ const openSans = Open_Sans({
   subsets: ["latin"],
 });
 
-type Props = {
-  params: Promise<{ locale: string }>;
-};
-
 export default async function RootLayout({
   children,
   params,
