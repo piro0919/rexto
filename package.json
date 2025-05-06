@@ -57,7 +57,7 @@
     "lint:fix": "next lint --fix",
     "lint:secret": "npx secretlint --maskSecrets '**/*'",
     "lint:style": "stylelint --fix '**/*.css'",
-    "prepare": "husky",
+    "prepare": "if [ \"$VERCEL\" != \"1\" ]; then husky install; fi",
     "prettier": "prettier --write .",
     "type-check": "tsc --noEmit"
   },
