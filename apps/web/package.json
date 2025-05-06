@@ -13,6 +13,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev --turbopack --port 3000",
+    "prepare": "if [ \"$VERCEL\" != \"1\" ]; then husky install; fi",
     "start": "next start"
   },
   "version": "0.1.0"
