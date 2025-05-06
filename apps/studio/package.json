@@ -9,6 +9,7 @@
     "zod": "3.24.4"
   },
   "devDependencies": {
+    "@eslint/js": "9.23.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "eslint": "^9"

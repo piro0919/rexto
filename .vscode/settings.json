@@ -7,5 +7,10 @@
     "**/CVS": true,
     "**/node_modules": true,
     "**/Thumbs.db": true
+  },
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#4F6A0A",
+    "statusBar.foreground": "#ffffff",
+    "tab.activeBorder": "#4F6A0A"
   }
 }
