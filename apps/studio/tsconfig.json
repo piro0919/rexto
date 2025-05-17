@@ -4,6 +4,12 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@auth/*": [
+        "../../packages/auth/src/*"
+      ],
+      "@db/*": [
+        "../../packages/db/src/*"
       ]
     },
     "plugins": [
