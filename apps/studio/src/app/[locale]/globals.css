@@ -1,12 +1,7 @@
 @import "ress";
 
 html {
-  @media (width < 768px) {
-    font-size: 56.25%;
-  }
-  @media (width >= 768px) {
-    font-size: 62.5%;
-  }
+  font-size: clamp(56.25%, 1.35svw, 62.5%);
 }
 
 html:focus-within {

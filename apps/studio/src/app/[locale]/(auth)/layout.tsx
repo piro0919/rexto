@@ -1,6 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import prisma from "@db/prisma";
 import { Fragment, type ReactNode } from "react";
+import AuthLayout from "./_components/Layout";
 
 export type LayoutProps = {
   children: ReactNode;
@@ -28,5 +29,5 @@ export default async function Layout({
     });
   }
 
-  return <>{children}</>;
+  return <AuthLayout>{children}</AuthLayout>;
 }
