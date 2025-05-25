@@ -5,6 +5,7 @@ import { jaJP } from "@clerk/localizations";
 import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { ThemeProvider } from "next-themes";
 import { Open_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import Layout from "./_components/Layout";
@@ -33,10 +34,12 @@ export default async function RootLayout({
 
   return (
     <ClerkProvider localization={locale === "ja" ? jaJP : undefined}>
-      <html lang={locale}>
+      <html lang={locale} suppressHydrationWarning={true}>
         <body className={openSans.className}>
           <NextIntlClientProvider>
-            <Layout>{children}</Layout>
+            <ThemeProvider>
+              <Layout>{children}</Layout>
+            </ThemeProvider>
           </NextIntlClientProvider>
         </body>
       </html>

@@ -1,5 +1,15 @@
 @import "ress";
 
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+[data-theme="dark"] {
+  --background: black;
+  --foreground: white;
+}
+
 html {
   font-size: clamp(56.25%, 1.35svw, 62.5%);
 }
@@ -9,6 +19,8 @@ html:focus-within {
 }
 
 body {
+  /* background: var(--background);
+  color: var(--foreground); */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
