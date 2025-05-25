@@ -1,0 +1,20 @@
+.nav {
+  border-right: 1px solid #e1e3e1;
+  height: 100%;
+  padding: 12px;
+}
+
+.link {
+  align-items: center;
+  border-radius: 6px;
+  display: flex;
+  font-size: 1.5rem;
+  gap: 9px;
+  overflow: hidden;
+  padding: 12px;
+  text-decoration: none;
+}
+
+.current {
+  background: #f7f7f7;
+}
