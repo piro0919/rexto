@@ -1,6 +1,7 @@
 .container {
   --header-height: 60px;
-  --navigation-width: 200px;
+  --navigation-width: 210px;
+  --closed-navigation-width: 70px;
 }
 
 .headerContainer {
@@ -14,9 +15,21 @@
   height: calc(100dvh - var(--header-height));
   inset: var(--header-height) auto 0 0;
   position: fixed;
+  /* stylelint-disable-next-line plugin/no-low-performance-animation-properties */
+  transition: width 250ms;
   width: var(--navigation-width);
+
+  .closed & {
+    width: var(--closed-navigation-width);
+  }
 }
 
 .main {
   margin: var(--header-height) 0 0 var(--navigation-width);
+  /* stylelint-disable-next-line plugin/no-low-performance-animation-properties */
+  transition: margin-left 250ms;
+
+  .closed & {
+    margin-left: var(--closed-navigation-width);
+  }
 }

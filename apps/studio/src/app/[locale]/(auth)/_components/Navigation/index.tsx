@@ -18,13 +18,18 @@ export default function Navigation(): React.JSX.Element {
             href="/"
           >
             <Layout size={21} />
-            <span>ダッシュボード</span>
+            <span className={styles.text}>ダッシュボード</span>
           </Link>
         </li>
         <li>
-          <Link className={styles.link} href="/">
+          <Link
+            className={clsx(styles.link, {
+              [styles.current]: pathname === "/hoge",
+            })}
+            href="/"
+          >
             <Layers size={21} />
-            <span>コンテンツ</span>
+            <span className={styles.text}>コンテンツ</span>
           </Link>
         </li>
       </ul>
