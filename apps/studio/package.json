@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "@clerk/localizations": "3.16.3",
-    "@clerk/nextjs": "6.20.2",
+    "@clerk/localizations": "3.16.4",
+    "@clerk/nextjs": "6.21.0",
     "@t3-oss/env-nextjs": "0.13.6",
     "clsx": "2.1.1",
     "feather-icons-react": "0.9.0",
@@ -13,7 +13,7 @@
     "react-dom": "^19.0.0",
     "ress": "5.0.2",
     "use-show-window-size": "0.0.1",
-    "zod": "3.25.46",
+    "zod": "3.25.56",
     "zustand": "5.0.5"
   },
   "name": "studio",
