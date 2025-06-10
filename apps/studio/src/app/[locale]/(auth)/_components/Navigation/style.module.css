@@ -1,7 +1,14 @@
 .nav {
   border-right: 1px solid #e1e3e1;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   padding: 12px;
+}
+
+.list {
+  display: grid;
+  gap: 3px;
 }
 
 .link {

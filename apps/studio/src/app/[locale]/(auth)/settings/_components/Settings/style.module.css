@@ -1,0 +1,28 @@
+.h1 {
+  font-size: 2.5rem;
+  padding: 24px 30px;
+}
+
+.section {
+  border: 1px solid #e1e3e1;
+  border-radius: 12px;
+  display: grid;
+  gap: 12px;
+  margin: 0 24px;
+  padding: 18px;
+}
+
+.h2 {
+  font-size: 2.1rem;
+}
+
+.field {
+  align-items: center;
+  display: flex;
+  gap: 9px;
+}
+
+.label {
+  cursor: pointer;
+  font-size: 1.4rem;
+}

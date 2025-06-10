@@ -1,0 +1,11 @@
+.createLink {
+  align-items: center;
+  background: #f7f7f7;
+  border: 1px solid #e1e3e1;
+  border-radius: 50dvmax;
+  display: flex;
+  font-size: 1.4rem;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+}

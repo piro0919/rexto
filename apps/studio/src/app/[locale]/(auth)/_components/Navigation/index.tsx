@@ -1,7 +1,8 @@
 "use client";
-import { Link, usePathname } from "@/i18n/navigation";
 import clsx from "clsx";
-import { Layers, Layout } from "feather-icons-react";
+import { BarChart2, Book, Layout, Settings } from "feather-icons-react";
+import Spacer from "react-spacer";
+import { Link, usePathname } from "@/i18n/navigation";
 import styles from "./style.module.css";
 
 export default function Navigation(): React.JSX.Element {
@@ -9,7 +10,7 @@ export default function Navigation(): React.JSX.Element {
 
   return (
     <nav className={styles.nav}>
-      <ul>
+      <ul className={styles.list}>
         <li>
           <Link
             className={clsx(styles.link, {
@@ -24,12 +25,37 @@ export default function Navigation(): React.JSX.Element {
         <li>
           <Link
             className={clsx(styles.link, {
-              [styles.current]: pathname === "/hoge",
+              [styles.current]: pathname === "/contents",
             })}
-            href="/"
+            href="/contents"
           >
-            <Layers size={21} />
+            <Book size={21} />
             <span className={styles.text}>コンテンツ</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            className={clsx(styles.link, {
+              [styles.current]: pathname === "/analytics",
+            })}
+            href="/analytics"
+          >
+            <BarChart2 size={21} />
+            <span className={styles.text}>アナリティクス</span>
+          </Link>
+        </li>
+      </ul>
+      <Spacer grow={1} />
+      <ul className={styles.list}>
+        <li>
+          <Link
+            className={clsx(styles.link, {
+              [styles.current]: pathname === "/settings",
+            })}
+            href="/settings"
+          >
+            <Settings size={21} />
+            <span className={styles.text}>設定</span>
           </Link>
         </li>
       </ul>

@@ -4,7 +4,9 @@ import styles from "./style.module.css";
 export default function SignIn(): React.JSX.Element {
   return (
     <div className={styles.container}>
-      <ClerkSignIn />
+      <div className={styles.formContainer}>
+        <ClerkSignIn />
+      </div>
     </div>
   );
 }

@@ -2,15 +2,19 @@
 import clsx from "clsx";
 import { type ReactNode } from "react";
 import useMenuStore from "../../useMenuStore";
-import Header from "../Header";
+import Header, { type HeaderProps } from "../Header";
 import Navigation from "../Navigation";
 import styles from "./style.module.css";
 
-export type LayoutProps = {
+export type LayoutProps = Pick<HeaderProps, "imageUrl" | "username"> & {
   children: ReactNode;
 };
 
-export default function Layout({ children }: LayoutProps): React.JSX.Element {
+export default function Layout({
+  children,
+  imageUrl,
+  username,
+}: LayoutProps): React.JSX.Element {
   const isOpen = useMenuStore((state) => state.isOpen);
 
   return (
@@ -20,7 +24,7 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
       })}
     >
       <div className={styles.headerContainer}>
-        <Header />
+        <Header imageUrl={imageUrl} username={username} />
       </div>
       <div className={styles.navigationContainer}>
         <Navigation />

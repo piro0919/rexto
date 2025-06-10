@@ -1,0 +1,11 @@
+.userButton {
+  border-radius: 50dvmax;
+  height: 36px;
+  overflow: hidden;
+  position: relative;
+  width: 36px;
+}
+
+.content {
+  background-color: #e9eef6;
+}

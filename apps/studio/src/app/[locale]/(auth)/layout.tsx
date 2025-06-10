@@ -18,16 +18,21 @@ export default async function Layout({
     select: { id: true },
     where: { clerkId: user.id },
   });
+  const username = user.username ?? "未設定ユーザー";
 
   if (!exists) {
     await prisma.user.create({
       data: {
         clerkId: user.id,
         // email: user.emailAddresses[0]?.emailAddress ?? "",
-        name: user.username ?? "未設定ユーザー",
+        name: username,
       },
     });
   }
 
-  return <AuthLayout>{children}</AuthLayout>;
+  return (
+    <AuthLayout imageUrl={user.imageUrl} username={username}>
+      {children}
+    </AuthLayout>
+  );
 }

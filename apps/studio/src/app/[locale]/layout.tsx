@@ -1,14 +1,15 @@
 // eslint-disable-next-line filenames/match-exported
-import { routing } from "@/i18n/routing";
-import "./globals.css";
 import { jaJP } from "@clerk/localizations";
+import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "next-themes";
 import { Open_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
 import Layout from "./_components/Layout";
+import "swiper/css";
 
 const openSans = Open_Sans({
   subsets: ["latin"],

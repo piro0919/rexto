@@ -4,3 +4,7 @@
   height: 100dvh;
   justify-content: center;
 }
+
+.formContainer {
+  transform: scale(1.6);
+}

@@ -1,0 +1,52 @@
+.overlay {
+  background: rgb(255 255 255 / 0.5);
+  inset: 0;
+  position: fixed;
+  z-index: 1;
+}
+
+.content {
+  background: var(--background);
+  border: 1px solid #e1e3e1;
+  border-radius: 24px;
+  display: grid;
+  grid-template: auto 1fr / 1fr;
+  height: calc(100% - 24px * 2);
+  inset: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  width: min(calc(100% - 24px * 2), 1280px);
+  z-index: 1;
+}
+
+.header {
+  border-bottom: 1px solid #e1e3e1;
+}
+
+.title {
+  font-size: 2rem;
+  padding: 12px 18px;
+}
+
+.main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  justify-content: center;
+}
+
+.description {
+  font-size: 1.5rem;
+}
+
+.selectButton {
+  align-items: center;
+  background: #f7f7f7;
+  border: 1px solid #e1e3e1;
+  border-radius: 50dvmax;
+  display: flex;
+  font-size: 1.4rem;
+  gap: 6px;
+  padding: 6px 12px;
+}

@@ -1,10 +1,17 @@
 "use client";
-import { SignedIn, UserButton } from "@clerk/nextjs";
 import { Menu } from "feather-icons-react";
+import Spacer from "react-spacer";
 import useMenuStore from "../../useMenuStore";
+import CreateButton from "../CreateButton";
+import UserButton, { type UserButtonProps } from "../UserButton";
 import styles from "./style.module.css";
 
-export default function Header(): React.JSX.Element {
+export type HeaderProps = Pick<UserButtonProps, "imageUrl" | "username">;
+
+export default function Header({
+  imageUrl,
+  username,
+}: HeaderProps): React.JSX.Element {
   const toggleIsOpen = useMenuStore((state) => state.toggleIsOpen);
 
   return (
@@ -12,18 +19,9 @@ export default function Header(): React.JSX.Element {
       <button className={styles.menuButton} onClick={toggleIsOpen}>
         <Menu size={21} />
       </button>
-      <SignedIn>
-        <UserButton
-          appearance={{
-            elements: {
-              avatarBox: {
-                height: 36,
-                width: 36,
-              },
-            },
-          }}
-        />
-      </SignedIn>
+      <Spacer grow={1} />
+      <CreateButton />
+      <UserButton imageUrl={imageUrl} username={username} />
     </header>
   );
 }
