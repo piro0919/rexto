@@ -1,0 +1,12 @@
+:root {
+  --header-height: 64px;
+  --mobile-menu-height: 0px;
+  --sidebar-width: 240px;
+  --sidebar-width-narrow: 72px;
+
+  @media (width < 768px) {
+    --mobile-menu-height: 60px;
+    --sidebar-width: 0px;
+    --sidebar-width-narrow: 0px;
+  }
+}

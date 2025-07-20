@@ -3,7 +3,10 @@
     "allow": [
       "Bash(claude doctor)",
       "Bash(npm run type-check:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "WebFetch(domain:clerk.com)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run prettier:*)"
     ],
     "deny": []
   }

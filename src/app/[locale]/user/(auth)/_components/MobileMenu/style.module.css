@@ -1,0 +1,10 @@
+.nav {
+  background: var(--background);
+  border-top: 1px solid hsl(from var(--background) h s calc(l - 18));
+  height: calc(var(--mobile-menu-height) + env(safe-area-inset-bottom));
+  padding: 0 0 env(safe-area-inset-bottom);
+
+  [data-theme="dark"] & {
+    border-color: hsl(from var(--background) h s calc(l + 18));
+  }
+}

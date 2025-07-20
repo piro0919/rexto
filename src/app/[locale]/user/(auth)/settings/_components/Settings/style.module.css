@@ -1,0 +1,40 @@
+.container {
+  padding: clamp(12px, 2.5dvw, 24px);
+}
+
+.section {
+  background: var(--background);
+  border: 1px solid hsl(from var(--background) h s calc(l - 18));
+  border-radius: 12px;
+
+  [data-theme="dark"] & {
+    border-color: hsl(from var(--background) h s calc(l + 18));
+  }
+}
+
+.sectionTitle {
+  font-size: 2.1rem;
+  padding: clamp(12px, 2.5dvw, 24px);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+}
+
+.item:not(:first-child) {
+  border-top: 1px solid hsl(from var(--background) h s calc(l - 18));
+
+  [data-theme="dark"] & {
+    border-color: hsl(from var(--background) h s calc(l + 18));
+  }
+}
+
+.term,
+.description {
+  padding: clamp(12px, 2.5dvw, 24px);
+}
+
+.term {
+  font-size: 1.2rem;
+}

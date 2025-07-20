@@ -1,81 +1,236 @@
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import createMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
 
+type Persona = "admin" | "author" | "user";
+type Locale = "en" | "ja";
+
 const intlMiddleware = createMiddleware(routing);
+/**
+ * Public paths configuration for each persona
+ */
+const PUBLIC_PATHS: Record<Persona, string[]> = {
+  admin: [
+    // "/",
+    // "/:locale",
+    "/:locale/sign-in(.*)",
+    "/:locale/sign-up(.*)",
+    "/sign-in(.*)",
+    "/sign-up(.*)",
+    "/api/webhooks(.*)",
+  ],
+  author: [
+    // "/",
+    // "/:locale",
+    "/:locale/sign-in(.*)",
+    "/:locale/sign-up(.*)",
+    "/sign-in(.*)",
+    "/sign-up(.*)",
+    "/api/webhooks(.*)",
+  ],
+  user: [
+    "/",
+    "/:locale",
+    "/:locale/search(.*)",
+    "/:locale/sign-in(.*)",
+    "/:locale/sign-up(.*)",
+    "/search(.*)",
+    "/sign-in(.*)",
+    "/sign-up(.*)",
+    "/api/webhooks(.*)",
+    // "/:locale/about(.*)",
+    // "/:locale/contact(.*)",
+    // "/:locale/pricing(.*)",
+    // "/about(.*)",
+    // "/contact(.*)",
+    // "/pricing(.*)",
+  ],
+};
 
-export default function middleware(request: NextRequest): NextResponse {
-  const url = request.nextUrl.clone();
+/**
+ * Creates a route matcher for the given persona
+ */
+function isPublicRouteFor(
+  persona: Persona,
+): ReturnType<typeof createRouteMatcher> {
+  const paths = PUBLIC_PATHS[persona as keyof typeof PUBLIC_PATHS];
+
+  return createRouteMatcher(paths);
+}
+
+/**
+ * Extracts hostname without port number for local development compatibility
+ */
+function getCleanHostname(request: NextRequest): string {
   const hostname = request.headers.get("host") ?? "";
-  const cleanHostname = hostname.split(":")[0];
 
-  // Check if already rewritten (prevent infinite loops)
+  return hostname.split(":")[0];
+}
+
+/**
+ * Determines the persona (application section) based on subdomain
+ */
+function getPersonaFromHostname(hostname: string): Persona {
+  if (hostname.startsWith("admin.")) return "admin";
+  if (hostname.startsWith("author.")) return "author";
+
+  return "user";
+}
+
+/**
+ * Checks if a pathname has already been rewritten to prevent infinite loops
+ */
+function isAlreadyRewritten(pathname: string): boolean {
+  return (
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/author") ||
+    pathname.startsWith("/user")
+  );
+}
+
+/**
+ * Extracts and validates locale from URL path segments
+ */
+function getLocaleFromPath(pathname: string): {
+  isValid: boolean;
+  locale: null | string;
+  remainingSegments: string[];
+} {
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const locale = pathSegments[0] || null;
+  const isValid = locale ? routing.locales.includes(locale as Locale) : false;
+  const remainingSegments = isValid ? pathSegments.slice(1) : pathSegments;
+
+  return { isValid, locale, remainingSegments };
+}
+
+/**
+ * Constructs the rewrite path with persona injection
+ */
+function buildRewritePath(
+  locale: string,
+  persona: Persona,
+  remainingPath?: string,
+): string {
+  const basePath = `/${locale}/${persona}`;
+
+  return remainingPath ? `${basePath}/${remainingPath}` : basePath;
+}
+
+/**
+ * Handles URL rewriting when locale is already present in the path
+ */
+function handleValidLocaleRewrite(
+  request: NextRequest,
+  locale: string,
+  persona: Persona,
+  remainingSegments: string[],
+): NextResponse {
+  const url = request.nextUrl.clone();
+  const remainingPath = remainingSegments.join("/");
+  const newPath = buildRewritePath(locale, persona, remainingPath || undefined);
+
+  url.pathname = newPath;
+
+  return NextResponse.rewrite(url);
+}
+
+/**
+ * Handles URL rewriting when next-intl detects the locale
+ */
+function handleLocaleDetectionRewrite(
+  request: NextRequest,
+  persona: Persona,
+): NextResponse {
+  const response = intlMiddleware(request);
+
+  // Check if next-intl performed a rewrite (locale detection)
   if (
-    url.pathname.startsWith("/admin") ||
-    url.pathname.startsWith("/author") ||
-    url.pathname.startsWith("/user")
+    response instanceof NextResponse &&
+    response.headers.get("x-middleware-rewrite")
   ) {
-    return NextResponse.next();
+    const rewriteUrl = new URL(response.headers.get("x-middleware-rewrite")!);
+    const { isValid, locale, remainingSegments } = getLocaleFromPath(
+      rewriteUrl.pathname,
+    );
+
+    if (isValid && locale) {
+      const remainingPath = remainingSegments.join("/");
+      const newPath = buildRewritePath(
+        locale,
+        persona,
+        remainingPath || undefined,
+      );
+
+      rewriteUrl.pathname = newPath;
+
+      return NextResponse.rewrite(rewriteUrl);
+    }
   }
 
-  // Determine persona based on subdomain
-  let persona = "user"; // default
+  return response;
+}
 
-  if (cleanHostname.startsWith("admin.")) {
-    persona = "admin";
-  } else if (cleanHostname.startsWith("author.")) {
-    persona = "author";
-  }
+/**
+ * Main middleware function that handles multi-domain routing with internationalization and authentication
+ *
+ * Routes requests based on hostname and locale:
+ * - admin.domain.com/ja/path → /ja/admin/path
+ * - author.domain.com/en/path → /en/author/path
+ * - domain.com/ja/path → /ja/user/path
+ */
+export default clerkMiddleware(
+  async (auth, request: NextRequest): Promise<NextResponse> => {
+    const { pathname } = request.nextUrl;
 
-  // Get locale from URL (first segment)
-  const pathSegments = url.pathname.split("/").filter(Boolean);
-  const locale = pathSegments[0];
-  // Check if locale is valid
-  const isValidLocale = routing.locales.includes(locale as "en" | "ja");
+    // Skip processing if already rewritten
+    if (isAlreadyRewritten(pathname)) {
+      return NextResponse.next();
+    }
 
-  if (isValidLocale) {
-    // Rewrite to persona path: /ja/xxx → /ja/_admin/xxx
-    const remainingPath = pathSegments.slice(1).join("/");
-    const newPath = remainingPath
-      ? `/${locale}/${persona}/${remainingPath}`
-      : `/${locale}/${persona}`;
+    const cleanHostname = getCleanHostname(request);
+    const persona = getPersonaFromHostname(cleanHostname);
+    // Protect routes using persona-specific public routes
+    const isPublicRoute = isPublicRouteFor(persona);
 
-    url.pathname = newPath;
+    if (!isPublicRoute(request)) {
+      const { redirectToSignIn, userId } = await auth();
 
-    return NextResponse.rewrite(url);
-  } else {
-    // No locale in path, let next-intl handle locale detection first
-    const response = intlMiddleware(request);
+      if (!userId) {
+        const signInResponse = redirectToSignIn();
 
-    // If next-intl adds a locale, we need to rewrite with persona
-    if (
-      response instanceof NextResponse &&
-      response.headers.get("x-middleware-rewrite")
-    ) {
-      const rewriteUrl = new URL(response.headers.get("x-middleware-rewrite")!);
-      const rewriteSegments = rewriteUrl.pathname.split("/").filter(Boolean);
-      const detectedLocale = rewriteSegments[0];
-
-      if (routing.locales.includes(detectedLocale as "en" | "ja")) {
-        const remainingPath = rewriteSegments.slice(1).join("/");
-        const newPath = remainingPath
-          ? `/${detectedLocale}/${persona}/${remainingPath}`
-          : `/${detectedLocale}/${persona}`;
-
-        rewriteUrl.pathname = newPath;
-
-        return NextResponse.rewrite(rewriteUrl);
+        return NextResponse.redirect(signInResponse.url, signInResponse);
       }
     }
 
-    return response;
-  }
-}
+    const {
+      isValid: isValidLocale,
+      locale,
+      remainingSegments,
+    } = getLocaleFromPath(pathname);
+
+    if (isValidLocale && locale) {
+      // Handle requests with valid locale in path
+      return handleValidLocaleRewrite(
+        request,
+        locale,
+        persona,
+        remainingSegments,
+      );
+    } else {
+      // Delegate locale detection to next-intl, then inject persona
+      return handleLocaleDetectionRewrite(request, persona);
+    }
+  },
+  { debug: process.env.NODE_ENV === "development" },
+);
 
 export const config = {
-  // Match all pathnames except for
-  // - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
-  // - … the ones containing a dot (e.g. `favicon.ico`)
-  // - … already rewritten paths with personas
-  matcher: "/((?!api|trpc|_next|_vercel|admin|author|user|.*\\..*).*)",
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // Always run for API routes
+    "/(api|trpc)(.*)",
+  ],
 };

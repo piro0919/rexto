@@ -1,12 +1,18 @@
 // eslint-disable-next-line filenames/match-exported
+import { jaJP } from "@clerk/localizations";
+import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
+import "./globals.css";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Noto_Sans_JP } from "next/font/google";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import Layout from "./_components/Layout";
+import "@szhsin/react-menu/dist/index.css";
+import "@szhsin/react-menu/dist/transitions/zoom.css";
+import "@szhsin/react-menu/dist/theme-dark.css";
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
@@ -74,12 +80,16 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale} suppressHydrationWarning={true}>
-      <body className={notoSansJP.className}>
-        <NextIntlClientProvider>
-          <ThemeProvider enableSystem={false}>{children}</ThemeProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <ClerkProvider localization={locale === "ja" ? jaJP : undefined}>
+      <html lang={locale} suppressHydrationWarning={true}>
+        <body className={notoSansJP.className}>
+          <NextIntlClientProvider>
+            <ThemeProvider enableSystem={false}>
+              <Layout>{children}</Layout>
+            </ThemeProvider>
+          </NextIntlClientProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

@@ -1,3 +1,3 @@
 export default function Page(): React.JSX.Element {
-  return <div>User</div>;
+  return <div>Search</div>;
 }

@@ -2,11 +2,15 @@
 
 :root {
   --background: #fff;
-  --foreground: #000;
+  --background-secondary: #e3e5ec;
+  --background-tertiary: #cce6ff;
+  --foreground: #282828;
 }
 
 [data-theme="dark"] {
-  --background: #000;
+  --background: #282828;
+  --background-secondary: #282828;
+  --background-tertiary: #1f1f1f;
   --foreground: #fff;
 }
 
@@ -24,7 +28,7 @@ html:focus-within {
 }
 
 body {
-  background-color: var(--background);
+  background: var(--background);
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

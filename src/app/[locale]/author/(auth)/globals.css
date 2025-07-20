@@ -1,0 +1,10 @@
+:root {
+  --header-height: 64px;
+  --sidebar-width: 240px;
+  --sidebar-width-narrow: 72px;
+
+  @media (width < 768px) {
+    --sidebar-width: 0;
+    --sidebar-width-narrow: 0;
+  }
+}

@@ -1,0 +1,26 @@
+.header {
+  inset: 0 0 auto;
+  position: fixed;
+  z-index: 1;
+}
+
+.sidebar {
+  inset: var(--header-height) 0 0;
+  position: fixed;
+
+  @media (width < 768px) {
+    display: none;
+  }
+}
+
+.main {
+  background: var(--background-secondary);
+  margin: var(--header-height) 0 0 var(--sidebar-width);
+  min-height: calc(100dvh - var(--header-height));
+  /* stylelint-disable-next-line plugin/no-low-performance-animation-properties */
+  transition: margin 0.25s ease-in-out;
+}
+
+.closed {
+  margin-left: var(--sidebar-width-narrow);
+}
