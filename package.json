@@ -69,10 +69,10 @@
   "name": "rexto2",
   "overrides": {
     "stylelint-css-modules-no-global-scoped-selector": {
-      "stylelint": "16.20.0"
+      "stylelint": "16.22.0"
     },
     "stylelint-no-unused-selectors": {
-      "stylelint": "16.20.0"
+      "stylelint": "16.22.0"
     }
   },
   "private": true,
