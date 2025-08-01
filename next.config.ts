@@ -13,7 +13,6 @@ const withSerwist = withSerwistInit({
 });
 const nextConfig: NextConfig = withSerwist({
   /* config options here */
-  allowedDevOrigins: ["admin.rexto.com", "author.rexto.com", "rexto.com"],
   experimental: {
     typedEnv: true,
     // typedRoutes: true,
